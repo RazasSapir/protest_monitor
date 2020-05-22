@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Protest Monitor | Find Protests Online</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/basic_style.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/choose_location_style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<h1>Protest Monitor</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<table>
+    <tbody>
+    <tr>
+        <td class="table_cell">
+            <h2>Retrieve Location</h2>
+            <form method=post enctype=multipart/form-data name="choose_location_form">
+            <div class="form-wrap">
+                <div class="location-selector">
+                    <div class="triangle_wrap">
+                        <div class="down_triangle"></div>
+                    </div>
+                    <select name="location" onchange="this.form.submit()">
+                        <option value="" disabled="disabled" selected="selected">Choose a location</option>
+                        {% for key in keys %}
+                            <option>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            </form>
+        </td>
+        <td  class="table_cell">
+            <h2>Request Location</h2>
+            <form method=post enctype=multipart/form-data name="request_location_form">
+            <div class="form-wrap">
+            <div class="location-selector">
+                <input name="query_location" type="search" class="search_query"
+                       placeholder="What location would you like to research?"
+                       oninput="querySearch(this)" onblur="clearResults(this)">
+                <div id="wait_circle">
+                    <div class="dot n1"></div>
+                    <div class="dot n2"></div>
+                    <div class="dot n3"></div>
+                    <div class="dot n4"></div>
+                    <div class="dot n5"></div>
+                </div>
+                <div id="search_results">
+                    <div class="triangle_wrap">
+                        <div class="down_triangle"></div>
+                    </div>
+                    <select name="requested_location" id="select_loc"></select>
+                </div>
+                <span class="input-number-decrement">–</span><input name="num_cycles" class="input-number" type="text" value="1" min="1" max="10"><span class="input-number-increment">+</span>
+                <input type="submit" class="submit-btn" value="Request">
+            </div>
+            </div>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="{{url_for('static', filename = 'js/choose_location_script.js') }}"></script>
+</html>

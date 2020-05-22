@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Protest Monitor | Find Protests Online</title>
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/basic_style.css') }}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/dashboard_style.css') }}">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js'></script>
+</head>
+<body>
+  <header>
+    <div class="title">Your Image Analysis</div>
+  </header>
+  <section>
+    <img class="uploaded_image" src="{{url_for('request_uploaded', filename=img) }}">
+      {% for i, (key, value) in analysis_values %}
+      <div class="info">
+        <table><tbody>
+          <tr><td>
+            <div class="title">{{ key }}</div>
+          </td></tr>
+          <tr><td>
+            <div class="value">{{ value }}%</div>
+          </td></tr>
+        </tbody></table>
+        <canvas id="c{{i}}" width="100" height="100"></canvas>
+        <script>
+        var data{{i}} = [{
+          value: {{value}},
+          color: "rgba(236,72,127,1)",
+          label: ""
+        },
+        {
+          value: {{100 - value}},
+          color: "#3c4449",
+          label: ""
+        }];
+
+        var options{{i}} = {
+        animation: false,
+        responsive: true,
+        segmentShowStroke: false,
+        percentageInnerCutout: 90
+        }
+
+        new Chart($("#c{{i}}").get(0).getContext("2d")).Doughnut(data{{i}},options{{i}});
+        </script>
+      </div>
+      {% endfor %}
+  </section>
+</body>
+  <script src="{{url_for('static', filename = 'js/dashboard_script.js') }}"></script>
+</html>

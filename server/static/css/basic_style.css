@@ -1,0 +1,75 @@
+/* Download Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal&display=swap');
+
+/* Background color */
+html, body {
+  background-color: #202B33;
+  color: #FFFFFF;
+  font-family: 'Rubik', sans-serif;
+  font-size: 18px;
+  font-smoothing: antialiased;
+}
+
+header {
+  color: #D3D3D3;
+}
+
+header {
+  height: 60px;
+  border-bottom: 1px solid #2a3843;
+}
+
+table {
+  table-layout: fixed;
+  width:100%;
+  margin: auto;
+}
+
+h1{
+  font-family: Tajawal, Rubik;
+}
+
+h2{
+  text-align:center;
+}
+
+/* All sumbit buttons */
+.submit-btn {
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  background: #202B33;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  border-bottom: 4px solid #202B33;
+  transition: all .2s ease;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.submit-btn:hover {
+  background: #1FB264;
+  color: #ffffff;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+
+.submit-btn:active {
+  border: 0;
+  transition: all .2s ease;
+}
+
+/* Div that wraps forms */
+.form-wrap {
+  background-color: #ffffff;
+  margin: auto;
+  padding: 20px;
+}
+
+.form-wrap-content {
+  display: none;
+  text-align: center;
+}

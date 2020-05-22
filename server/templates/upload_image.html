@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Protest Monitor | Find Protests Online</title>
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/upload_image_style.css') }}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/basic_style.css') }}">
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Upload an Image to Evaluate</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<div class="form-wrap">
+  <form method=post enctype=multipart/form-data>
+    <div class="image-upload-wrap">
+      <input class="file-upload-input" type='file' name='file' onchange="readURL(this);" accept="image/*" />
+      <div class="drag-text">
+        <h3>Drag and drop a file or click area to upload</h3>
+      </div>
+    </div>
+    <div class="file-upload-content">
+      <img class="file-upload-image" src="#" alt="your image" />
+      <div class="image-title-wrap">
+        <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+      </div>
+    </div>
+    <input class="submit-btn" type="submit" value="Upload">
+  </form>
+</div>
+</body>
+  <script  src="{{url_for('static', filename = 'js/upload_image_script.js') }}"></script>
+</html>

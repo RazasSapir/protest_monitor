@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Protest Monitor | Find Protests Online</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/basic_style.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/location_summary_style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script  src="{{url_for('static', filename = 'js/location_summary_script.js') }}"></script>
+</head>
+<body>
+<h1 style="text-align:center;">{{location.name}}</h1>
+<table>
+    <tbody>
+    <tr>
+        <td class="overall_td">
+            <div class="sum_graph">
+    <canvas id="date_graph"></canvas>
+    <script>
+    var dates = listToDate({{labels|safe}})
+    var ctx = document.getElementById('date_graph').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: dates,
+            datasets: [{
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{num_images}}
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                    },
+                }]
+            },
+            legend: { display: false },
+            animation: false,
+            responsive: true,
+        }
+    });
+    </script>
+</div>
+        </td>
+        <td class="overall_td">
+            <div id="map"></div>
+            <script>
+            function initMap() {
+                var uluru = {lat: {{location.lat}}, lng:{{location.lng}}};
+                var map = new google.maps.Map(
+                  document.getElementById('map'), {zoom: 13, center: uluru, mapTypeId: 'hybrid'});
+                var marker = new google.maps.Marker({position: uluru, map: map});
+            }
+            </script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSBRwVcyNFaWrQdZwYW8H0mjMWg2TWEIM&callback=initMap"></script>
+        </td>
+    </tr>
+    </tbody>
+</table>
+{% for date, (images, stats, max_people) in protest %}
+<h2>{{date}}</h2>
+<table style="width: 100%;">
+    <tbody>
+    <tr>
+        <td class="images_cell">
+            <h3>Protest Images</h3>
+            <div class="slideshow-container">
+            {% set counter = loop.index %}
+            {% for image, signs in images.items() %}
+                <div class="mySlides{{counter}}">
+                    <img class="protest_image" src="{{url_for('request_protest_image', protest_image=image) }}">
+                </div>
+            {% endfor %}
+              <!-- Next and previous buttons -->
+              <a class="prev" onclick="plusSlides(-1, {{counter - 1}})">&#10094;</a>
+              <a class="next" onclick="plusSlides(1, {{counter - 1}})">&#10095;</a>
+            </div>
+            <!--
+            <div style="text-align:center">
+            {% for image, signs in images.items() %}
+              <span class="dot" onclick="currentSlide({{loop.index}}, {{counter - 1}})"></span>
+            {% endfor %}
+            </div>
+            -->
+            <!-- Thumbnail images -->
+            <div class="row">
+            {% for image, signs in images.items() %}
+                <div class="column">
+                    <img class="demo cursor" src="{{url_for('request_protest_image', protest_image=image) }}" onclick="currentSlide({{loop.index}}, {{counter - 1}})">
+                </div>
+            {% endfor %}
+            </div>
+        </td>
+        <td class="stats_cell">
+            <table>
+                <tbody>
+                <h3>Protest Statistics</h3>
+                {% for title, value in stats.items() %}
+                <tr>
+                    <td>
+                        <div class="stat_wrap">
+                        <div class="title">{{ title }}</div>
+                        <div class="value">{{ value }}%</div>
+                        <canvas id="c{{counter}}{{loop.index}}" class="doughnut"></canvas>
+                        <script>
+                        var data{{counter}}{{loop.index}} = {
+                            labels: ['True', 'False'],
+                            datasets: [{
+                                data: [{{value}}, {{100 - value}}],
+                                backgroundColor: ['rgba(255, 99, 132, 1)', 'rgba(0, 0, 0, 0)'],
+                            }],
+                        };
+
+                        var options{{counter}}{{loop.index}} = {
+                            legend: { display: false },
+                            animation: false,
+                            responsive: true,
+                        }
+                        var ctx = document.getElementById('c{{counter}}{{loop.index}}').getContext('2d');
+                        new Chart(ctx, { type: 'doughnut', data: data{{counter}}{{loop.index}}, options: options{{counter}}{{loop.index}}});
+                        </script>
+                        </div>
+                    </td>
+                </tr>
+                 {% endfor %}
+                </tbody>
+            </table>
+        </td>
+        <td class="sign_cell">
+            <div class="people_wrap">
+                <h3>Max People Detected:</h3>
+                <div class="people_number">{{max_people}}</div>
+            </div>
+            <div>
+                <h3>Detected Signs:</h3>
+                <div class="row">
+                    {% for image, signs in images.items() %}
+                    {% set sign_counter = loop.index %}
+                        {% for sign in signs %}
+                        <div class="column">
+                            <img class="sign_image" src="{{url_for('request_protest_image', protest_image=sign) }}">
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+{% if loop.last %}
+<script>
+  var slideIndex = [];
+  var slideId = [];
+  for (i=1; i<={{counter}}; i++){
+    slideIndex.push(1)
+    slideId.push("mySlides" + i.toString())
+  }
+
+  for (i=1; i<={{counter}}; i++){
+      showSlides(1, i - 1)
+  }
+</script>
+{% endif %}
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,237 @@
+/* Main table cell */
+.table_cell{
+  width:50%;
+  padding:20px;
+  vertical-align: top;
+}
+
+/* Location Selector */
+.form-select {
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background: #ffffff;
+  overflow: hidden;
+  border: 1px solid #cbcbcb;
+  border-radius: 3px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0, 0, 0, 0.07);
+  -moz-transition: box-shadow 0.2s;
+  -o-transition: box-shadow 0.2s;
+  -webkit-transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s;
+}
+
+.form-select:focus, .form-select:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-select:after {
+  content: '▾';
+  position: absolute;
+  top: 0;
+  right: 12px;
+  z-index: 1;
+  color: #bbbbbb;
+  line-height: 40px;
+  font-size: 14px;
+}
+.ie .form-select:after {
+  display: none;
+}
+
+select {
+  position: relative;
+  background: transparent;
+  background-image: none;
+  display: block;
+  width: 100%;
+  outline: none;
+  color: #888888;
+  cursor: pointer;
+  z-index: 2;
+  border: none;
+  padding: 10px 10px 10px 5px;
+  text-overflow: '';
+  text-indent: 5px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  font-size: 18px;
+  text-align-last: center;
+}
+
+select[multiple=multiple] {
+  height: auto;
+  border: 1px solid #cbcbcb;
+  border-radius: 3px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0, 0, 0, 0.07);
+  -moz-transition: box-shadow 0.2s;
+  -o-transition: box-shadow 0.2s;
+  -webkit-transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s;
+}
+
+select[multiple=multiple]:hover {
+  border-color: #cccccc;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+select option[disabled] {
+  color: #eeeeee;
+  text-shadow: none;
+  border: none;
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #888888;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.column-6 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -20px 0 0 -150px;
+  width: 300px;
+}
+
+.location-selector{
+ border: #738491;
+}
+
+/* Select triangle */
+.triangle_wrap{
+  position: relative;
+  float: right;
+  margin-right:5%;
+}
+
+.down_triangle {
+  position: absolute;
+  float: right;
+  width: 0;
+  height: 0;
+  margin-top: 15px;
+  border-top: 15px solid #202B33;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+}
+
+/* Default: do not show search results */
+#search_results {
+  display:none;
+}
+
+
+#select_loc{
+  display: none;
+}
+
+/* Text input - search location */
+.search_query {
+  width: 100%;
+  border: 3px solid #202B33;
+  padding: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  height: 40px;
+  border-radius: 5px;
+}
+
+/* Choose number of cycles */
+.input-number {
+  width: 80px;
+  padding: 0 12px;
+  vertical-align: top;
+  text-align: center;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.input-number,
+.input-number-decrement,
+.input-number-increment {
+  border: 1px solid #ccc;
+  height: 40px;
+  user-select: none;
+}
+
+.input-number-decrement,
+.input-number-increment {
+  display: inline-block;
+  width: 30px;
+  line-height: 38px;
+  background: #f1f1f1;
+  color: #444;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+.input-number-decrement:active,
+.input-number-increment:active {
+  background: #ddd;
+}
+
+.input-number-decrement {
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.input-number-increment {
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Wait circle animation */
+#wait_circle {
+  display: none;
+  position: relative;
+  float: right;
+  right: 3%;
+  margin-top: 1.5%;
+}
+
+.dot{
+  background-color: #1ED06A;
+  width: 5px;
+  height: 5px;
+  display: block;
+  position: absolute;
+  left: calc(50% - 5px);
+  border-radius: 3px;
+  transform-origin: 5px 10px;
+  animation: rotate;
+  animation-iteration-count: infinite;
+  animation-duration: 1.5s;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(359deg);
+  }
+}
+
+.n2{
+  animation-delay: 0.1s;
+  background-color: yellow;
+}
+.n3{
+  animation-delay: 0.2s;
+  background-color: tomato;
+}
+.n4{
+  animation-delay: 0.3s;
+  background-color: #1ec5ce;
+}
+
+.n5{
+  animation-delay: 0.4s;
+  background-color: #ce1e62;
+}

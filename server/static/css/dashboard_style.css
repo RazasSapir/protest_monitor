@@ -1,0 +1,60 @@
+/* General */
+header .title {
+  float: left;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+section > header {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+section .inlineChart {
+  float: left;
+  width: 30%;
+  margin-bottom: 50px;
+}
+
+/* Doughnut Graphs */
+.inlineChart canvas {
+  float: left;
+}
+
+.info {
+  float: left;
+  padding-left: 20px;
+  padding-top: 16px;
+  display: table
+}
+
+.info .value {
+  font-size: 1.0rem;
+  color: #D3D3D3;
+}
+
+
+table th, article section table td {
+  padding: 15px 0px;
+  border-bottom: 1px solid #2a3843;
+}
+
+table thead th {
+  text-align: left;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #D3D3D3;
+}
+
+/* Uploaded img */
+.uploaded_image{
+  height: 500px;
+  margin: 10px;
+  display: block;
+}

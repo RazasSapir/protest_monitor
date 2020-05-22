@@ -1,0 +1,174 @@
+/* Location Summary table cells */
+.overall_td{
+  width: 50%;
+  padding: 20px;
+}
+
+/* Google Maps API div */
+#map {
+  position:relative;
+  width: 100%;
+  height: 350px;
+}
+
+/* Main Graph Div */
+.sum_graph {
+}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 500px;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+  cursor: pointer;
+}
+
+.row{
+  content: "";
+  display: table;
+  clear: both;
+  margin: auto;
+}
+
+.column {
+  float: left;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+  opacity: 0.6;
+  width:50px;
+  height:50px;
+  margin-right: 5px;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+/* Protest table cells */
+.stats_cell {
+  width: 20%;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.images_cell {
+  width: 50%;
+}
+
+.sign_cell {
+  width:30%;
+  vertical-align:top;
+}
+
+.sign_image {
+  width: 100px;
+  height: 100px;
+  transition: transform .2s; /* Animation */
+}
+
+.sign_image:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transform: scale(2);
+}
+
+.protest_image {
+  width:100%;
+  height: 400px;
+}
+
+.people_number {
+  font-size:50px;
+  text-align:left;
+}
+
+/* Graphs */
+.doughnut {
+  width: 200px;
+  height: 200px;
+}
+
+
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
