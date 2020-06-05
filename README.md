@@ -41,6 +41,6 @@ Identifying and analyzing protests through data from Instagram
 
 
 ## Sources
-[Joseph Redmon, et al. "YOLOv3: An Incremental Improvement." (2018).](https://arxiv.org/pdf/1804.02767.pdf)
-[Yuhong Li, et al. "CSRNet: Dilated Convolutional Neural Networks for Understanding the Highly Congested Scenes." (2018).](https://arxiv.org/pdf/1802.10062.pdf)
-[Donghyeon Won, et al. "Protest Activity Detection and Perceived Violence Estimation from Social Media Images." (2017).](https://arxiv.org/pdf/1709.06204.pdf)
+1. [Joseph Redmon, et al. "YOLOv3: An Incremental Improvement." (2018).](https://arxiv.org/pdf/1804.02767.pdf)
+2. [Yuhong Li, et al. "CSRNet: Dilated Convolutional Neural Networks for Understanding the Highly Congested Scenes." (2018).](https://arxiv.org/pdf/1802.10062.pdf)
+3. [Donghyeon Won, et al. "Protest Activity Detection and Perceived Violence Estimation from Social Media Images." (2017).](https://arxiv.org/pdf/1709.06204.pdf)
