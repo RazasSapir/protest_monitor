@@ -16,22 +16,22 @@ downloaded_images_queue = queue.Queue()  # First queue - posts
 protest_post_queue = queue.Queue()  # Second queue - analyzed images
 protests_queue = queue.Queue()  # Third queue - batched protests
 
-running = {"retrieve": True, "eval": True, "identify": True, "save": True}
+running = {}
 
 
 def retrieve_from_geo(loader, location_id, target_dir, cycles):
     print("Start Retrieve")
     image_gen = loader.get_location_posts(location_id)
     num_downloaded = 1
-    while running["retrieve"]:
+    while running["retrieve_thread"]:
         if num_downloaded >= cycles * CYCLE_SIZE:
-            running["retrieve"] = False
+            running["retrieve_thread"] = False
             print("Stopping Retrieve")
         try:
             img = next(image_gen)
         except (StopIteration, GeneratorExit) as e:
-            running["retrieve"] = False
-            print("No more images.")
+            running["retrieve_thread"] = False
+            print("No more images: " + str(e))
         img_path_no_type = os.path.join(target_dir, img.shortcode)
         if loader.download_pic(img_path_no_type, img.url, img.date):
             print("Downloaded: " + img.shortcode + ".jpg.")
@@ -45,10 +45,10 @@ def retrieve_from_geo(loader, location_id, target_dir, cycles):
 
 def eval_protests(csv_path, protest_model):
     print("Start Eval")
-    while running["eval"]:
+    while running["eval_thread"]:
         if downloaded_images_queue.empty():
-            if not running["retrieve"]:
-                running["eval"] = False
+            if not running["retrieve_thread"]:
+                running["eval_thread"] = False
                 print("Stopping Eval")
             sleep(SLEEP_TIME)
         else:
@@ -68,12 +68,12 @@ def identify_protests():
     curr_protest = []
     last_process_post = None
     print("Start Identify")
-    while running["identify"]:
+    while running["find_protests_thread"]:
         if protest_post_queue.empty():
-            if not running["eval"]:
+            if not running["eval_thread"]:
                 if not len(curr_protest) == 0:
                     protests_queue.put(curr_protest)
-                running["identify"] = False
+                running["find_protests_thread"] = False
                 print("Stopping Identify")
             sleep(SLEEP_TIME)
         else:
@@ -98,12 +98,12 @@ def identify_protests():
             last_process_post = curr_protest_post
 
 
-def handle_protests(target_dir, method, ssd_model, crowd_model):
+def handle_protests(target_dir, yolo_model, crowd_model):
     print("Start Saving")
-    while running["save"]:
+    while running["save_protest_thread"]:
         if protests_queue.empty():
-            if not running["identify"]:
-                running["save"] = False
+            if not running["find_protests_thread"]:
+                running["save_protest_thread"] = False
                 print("Stopping Save")
             sleep(SLEEP_TIME)
         else:
@@ -116,7 +116,7 @@ def handle_protests(target_dir, method, ssd_model, crowd_model):
                 print("Looking for signs in: " + protest_post.post.shortcode)
                 new_location = os.path.join(curr_protest_dir, os.path.basename(protest_post.post.path))
                 os.rename(protest_post.post.path, new_location)
-                signs_in_post = signs_detector.find_signs(new_location, method)
+                signs_in_post = signs_detector.find_signs(new_location)
                 print("Saved new protest with " + str(len(signs_in_post)) + " signs in it.")
                 if not len(signs_in_post) == 0:
                     sign_dir = os.path.join(curr_protest_dir, protest_post.post.shortcode)
@@ -125,7 +125,7 @@ def handle_protests(target_dir, method, ssd_model, crowd_model):
                         sign_image = Image.fromarray(sign)
                         sign_path = os.path.join(sign_dir, "sign" + str(i) + ".jpg")
                         sign_image.save(sign_path)
-                max_people = max(max_people, people_counter.count_people(new_location, ssd_model, crowd_model))
+                max_people = max(max_people, people_counter.count_people(new_location, yolo_model, crowd_model))
                 if len(sum_stats) == 0:
                     sum_stats = list(protest_post)[1:]
                 else:
@@ -138,9 +138,11 @@ def handle_protests(target_dir, method, ssd_model, crowd_model):
 
 
 def seek_protests(loader, requested_location, cycles):
+    global running
+    running = {}
     target_dir = os.path.join(BASE_DOWNLOAD_DIR, str(requested_location.id))
     protest_pred_model = classify_protest.get_model(PROTEST_MODEL_PATH)
-    ssd_model, crowd_model = people_counter.get_models(YOLO_MODEL_PATH, CROWD_MODEL_PATH)
+    yolo_model, crowd_model = people_counter.get_models(YOLO_MODEL_PATH, CROWD_MODEL_PATH)
     if not os.path.isdir(target_dir):
         os.mkdir(target_dir)
         csv_path = os.path.join(target_dir, str(requested_location.id) + "_analysis.txt")
@@ -148,12 +150,15 @@ def seek_protests(loader, requested_location, cycles):
             csv_writer = csv.writer(csv_file, delimiter='\t')
             csv_writer.writerow(POST_SCHEME + PROTEST_SCHEME[1:])
         threads = {
-            "retrieve_thread": Thread(target=retrieve_from_geo, args=(loader, requested_location.id, target_dir, cycles)),
-            "eval_thread": Thread(target=eval_protests, args=(csv_path, protest_pred_model)),
+            "retrieve_thread": Thread(target=retrieve_from_geo,
+                                      args=(loader, requested_location.id, target_dir, cycles)),
+            "eval_thread": Thread(target=eval_protests,
+                                  args=(csv_path, protest_pred_model)),
             "find_protests_thread": Thread(target=identify_protests),
             "save_protest_thread": Thread(target=handle_protests,
-                                          args=(target_dir, signs_detector.DETECT_BY_SEGMENTS, ssd_model, crowd_model))}
+                                          args=(target_dir, yolo_model, crowd_model))}
         for thread_key in threads:
+            running[thread_key] = True
             threads[thread_key].start()
             sleep(10)
         for thread_key in threads:

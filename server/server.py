@@ -1,5 +1,7 @@
 import os
 import json
+import queue
+from time import sleep
 from threading import Thread
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
@@ -8,18 +10,20 @@ import search_protests
 from retrieving_images import retrieve_images
 from protest_classification import classify_protest
 from search_protests import protest_seeker
+from search_protests.constants import BASE_DIR
 
 app = Flask(__name__)
-app.config['BASE_DIR'] = r""
-app.config['STATIC_SOURCE'] = os.path.join(app.config['BASE_DIR'], r"server\static")
-app.config['UPLOAD_FOLDER'] = os.path.join(app.config['BASE_DIR'], r"server\upload")
-app.config['PROTEST_SOURCE'] = os.path.join(app.config['BASE_DIR'], r"data\protests_researched")
+app.config['BASE_DIR'] = BASE_DIR
+app.config['STATIC_SOURCE'] = os.path.join(BASE_DIR, r"server\static")
+app.config['PROTEST_SOURCE'] = os.path.join(BASE_DIR, r"data\protests_researched")
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 IMAGE_TYPES = ["png", "jpg", "jpeg"]
 WANTED_STATS = ["violence", "fire", "police"]
 MAX_SEARCH_RESULTS = 5
-WITH_RESEARCH = True
+WITH_RESEARCH = False
+
+research_queue = queue.Queue()
 
 
 def allowed_file(filename):
@@ -37,9 +41,11 @@ def main_page():
         elif len(request.form) == 3:
             requested_location = retrieve_images.Location._make(request.form['requested_location'].split(':'))
             cycles = int(request.form['num_cycles'])
-            location_thread = Thread(target=protest_seeker.seek_protests, args=(app.config['LOADER'], requested_location, cycles))
-            location_thread.start()
-            flash('Your research has started')
+            location_thread = Thread(target=protest_seeker.seek_protests,
+                                     args=(app.config['LOADER'], requested_location, cycles))
+            research_queue.put(location_thread)
+            print("Requested research on location: " + str(requested_location))
+            flash('Your research was requested')
         else:
             flash('Please fill the form')
     return render_template('choose_location.html', keys=[l.name for l in app.config['PLACES']])
@@ -128,9 +134,25 @@ def get_protest_from_path(protest_code):
     return protest
 
 
+def research_handler():
+    while True:
+        if research_queue.empty():
+            sleep(10)
+        else:
+            current_research = research_queue.get()
+            print("Starting research on location")
+            current_research.start()
+            current_research.join()
+
+
 if __name__ == '__main__':
     app.secret_key = ''
     if WITH_RESEARCH:
         app.config['MODEL'] = classify_protest.get_model(search_protests.protest_seeker.PROTEST_MODEL_PATH)
-        app.config['LOADER'] = retrieve_images.get_loader(retrieve_images.USERNAME, retrieve_images.PASSWORD, quiet=True)
+        app.config['LOADER'] = retrieve_images.get_loader(retrieve_images.USERNAME,
+                                                          retrieve_images.PASSWORD,
+                                                          quiet=True)
+    research_thread = Thread(target=research_handler)
+    research_thread.start()
     app.run(host='0.0.0.0', port=80)
+    research_thread.join()

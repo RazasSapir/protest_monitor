@@ -1,8 +1,8 @@
 import os
 from counting_people.crowd_detection import count_crowd
 from counting_people.Yolo_detection import YOLO_detection
+from search_protests.constants import BASE_DIR
 
-BASE_DIR = r""
 SSD_MODEL_PATH = os.path.join(BASE_DIR, r"counting_people\SSD_counter\data\yolov3.weights")
 CROWD_MODEL_PATH = os.path.join(BASE_DIR, r"\counting_people\crowd_detection\weights\crownd_weights.pth.tar")
 

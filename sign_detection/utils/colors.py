@@ -5,12 +5,12 @@ from matplotlib import pyplot as plt
 from sign_detection.constants import DEBUG
 
 COLORS_BOUNDARIES = {
-    'red': (((0, 100, 150), (15, 255, 255)),  ((165, 100, 100), (180, 255, 255))),  # Red has 2 variations
-    'yellow': ((10, 100, 150), (35, 255, 255)),
-    'green': ((30, 100, 150), (85, 255, 255)),
-    'blue': ((80, 100, 150), (145, 255, 255)),
+    'red': (((0, 100, 120), (15, 255, 255)),  ((165, 100, 100), (180, 255, 255))),  # Red has 2 variations
+    'yellow': ((10, 100, 120), (35, 255, 255)),
+    'green': ((30, 100, 120), (85, 255, 255)),
+    'blue': ((80, 100, 120), (145, 255, 255)),
     'pink': ((140, 100, 170), (170, 255, 255)),
-    'white': ((0, 0, 170), (180, 70, 255)),
+    'white': ((0, 0, 150), (180, 100, 255)),
     'black': ((0, 0, 0), (180, 255, 70))
 }
 
@@ -34,7 +34,6 @@ def split_masks(image):
     masks_dict = {}
     hsv_image = cv2.cvtColor(image.copy(), cv2.COLOR_BGR2HSV)
     for color_key in COLORS_BOUNDARIES:
-        mask = None
         if not color_key == 'red':
             low_color, high_color = COLORS_BOUNDARIES[color_key]
             mask = cv2.inRange(hsv_image, low_color, high_color)

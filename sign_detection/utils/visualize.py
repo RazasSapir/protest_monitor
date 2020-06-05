@@ -3,10 +3,9 @@ from matplotlib import pyplot as plt
 from sign_detection.intersection_lines import find_quadrilaterals
 from sign_detection.utils import colors
 from sign_detection.constants import DEBUG
-from sign_detection.intersection_lines.edge_detection import detect_lines
 
 
-def print_coordinates(event, x, y, flags, param):
+def print_coordinates(event, x, y):
     if event == cv2.EVENT_LBUTTONDBLCLK:
         print(str(x) + ", " + str(y))
 

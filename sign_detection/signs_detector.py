@@ -60,8 +60,7 @@ def analyze_signs_from_image(image, method):
             squares.append(signs)
     if len(squares) == 0:
         return []
-    squares = np.concatenate(squares)
-    return squares
+    return [item for sublist in squares for item in sublist]
 
 
 def remove_fully_contained_signs(squares):
@@ -112,8 +111,7 @@ def analyze_image(image):
 
 def find_signs(image_path):
     image = cv2.imread(image_path)
-    signs = analyze_signs_from_image(image, method=DETECT_BY_CONTOUR) + \
-            analyze_signs_from_image(image, method=DETECT_BY_SEGMENTS)
+    signs = analyze_signs_from_image(image, method=DETECT_BY_CONTOUR) + analyze_signs_from_image(image, method=DETECT_BY_SEGMENTS)
     signs = remove_fully_contained_signs(signs)
     rectangle_signs = []
     for coordinates in signs:
