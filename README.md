@@ -33,11 +33,19 @@ Identifying and analyzing protests through data from Instagram
     * [Shapely 1.7.0](https://pypi.org/project/Shapely/)
     * [Bentley-Ottmann 0.6.0](https://pypi.org/project/bentley-ottmann/) 
 
-* Download models' weights 
+## Installation
+* Clone project
+* Download models' weights:
     * [Yolov3-416](https://pjreddie.com/media/files/yolov3.weights)
     * [Protest Detector](https://www.dropbox.com/s/rxslj6x01otf62i/model_best.pth.tar?dl=0)
     * [Crowd Detection](https://drive.google.com/file/d/1KY11yLorynba14Sg7whFOfVeh2ja02wm/view)
-* Update 'search_protests\constants.py' paths
+* Create directories: 'data\downloaded_images' and 'data\protests_researched'.
+* Create file 'data\protests_researched\researched_locations.txt'.
+* Update 'search_protests\constants.py' paths for weights.
+* Update 'retrieving_images\retrieve_images.py' for Instagram username and password.
+
+## Usage
+* Run 'server\server.py'
 
 
 ## Sources
